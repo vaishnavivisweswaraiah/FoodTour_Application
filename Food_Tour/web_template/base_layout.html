@@ -5,10 +5,14 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src={% static 'tour.js' %}></script>
+    <link rel="stylesheet" href={% static 'tour.css' %}>
+
   </head>
-  <body>
+  <body >
     <h1>FORM</h1>
-    <form  action="{% url 'result' %}" method="post">
+    <form  action="{% url 'result' %}" method="post" >
       {% csrf_token%}
       <label for="Food_Category">Enter Food Category : </label>
       <input type="text" name="Food_Category"  placeholder="e.g sushi,burgers" required><br><br>
@@ -20,29 +24,21 @@
       <label for="city" >City : </label>
       <input type="text" name="city" value="" required>
       <label for="state" >State : </label>
-      <input type="text" name="state" value="" required>
+      <input type="text" name="state" value="" required><br><br>
 
       <label for="country">Country: </label>
       <select name="country" >
         <option disabled="true" selected>Country</option>
         <option value='US'>US</option>
       </select>
-
-
       <label for="zipcode" >Zipcode : </label>
       <input type="number" name="zipcode" value="" placeholder=" e.g 45324" required><br><br>
-
-
-
       <label for="radius">Enter radius in miles : </label>
       <input type="number" name="radius" min='1' max='24' value='1' required><br><br>
       <input type="submit" name="Search" value="Search">
-
     </form>
     {% block content %}
     {% endblock  %}
-    <script type="text/javascript" src={% static 'main.js' %}>
 
-    </script>
   </body>
 </html>

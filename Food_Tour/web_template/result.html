@@ -1,0 +1,120 @@
+
+
+{% extends 'base_layout.html' %}
+{% load static %}
+{% block title %}result page{% endblock %}
+
+{% block content %}
+
+
+<div style = "width:100%">
+  <div style="width : 50% ;float:left">
+      <form  action="{% url 'filter_sort' %}" method="post">
+        {% csrf_token%}
+            <div class="Sorting">
+              <p>Sort :
+                  <select name="sort-select" >
+                      <option disabled="true" selected>by_Rating</option>
+                      {% for category in sort_list %}
+                      <option value={{category}} >{{category}}</option>
+                      {% endfor %}
+                  </select>
+
+                  <select name="sort-type" >
+                      <option disabled="true" selected>Descending</option>
+                      {% for type in sort_by %}
+                      <option value={{type}} >{{type}}</option>
+                      {% endfor %}
+                  </select>
+              </p>
+            </div>
+
+          <div class="Filters">
+            <p>Filters:
+                <input list="restaurant_name" name="restaurant_name" />
+                  <datalist id="restaurant_name">
+                    <option disabled="true" selected>by_name</option>
+                    {% for row in table %}
+                    <option value={{row.name}}>{{row.name}}</option>
+                    {% endfor %}
+                  </datalist>
+                <select name="rating_values">
+                    <option disabled="true" selected>by_Any_Rating</option>
+                    {% for r_value in rating_values %}
+                    <option value={{r_value}}>{{r_value}}</option>
+                    {% endfor %}
+                </select>
+                <select name="distance_values">
+                    <option disabled="true" selected>search_RadiusMiles</option>
+                    {% for d_value in distance_values %}
+                    <option value={{d_value}}>{{d_value}}</option>
+                    {% endfor %}
+                </select>
+              </p>
+          </div>
+          <input type="submit" name="Go" value="Go">
+
+          {% if table %}
+          <div class="result_Class">
+          <table cellspacing="0" rules="all" border="1" id="tour_table" >
+            <thead>
+            <tr>
+              {% for table_names in Table_header %}
+              <th>{{table_names}}</th>
+              {% endfor %}
+            </tr>
+            </thead>
+          <tbody>
+          {% for row in table %}
+          <!--draggable="True" ondragstart="dragStart()" ondragover="dragTarget()"-->
+            <tr id="{{row.id}}">
+              <td><img src="{{row.image_url}}" alt="None" width='100' height ='100'></td><td>{{row.name}}</td> <td>{{row.rating}}</td> <td>{{row.distance}}</td>
+              <td> <input type="checkbox" onclick=addTour() ></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+          </table>
+          <!--<input type="button"  value="add selected to tour" onclick=addTour()> -->
+          {% endif %}
+
+          {% if not table %}
+          <p>No search Result</p>
+          {% endif %}
+          </div>
+        </form>
+      </div>
+
+  <div style="margin-left: 50% ;" id="tourlist" onload="existing_favourite()" >
+  <p>Food_tour  </p>
+  <button type="button" name="Favourite" class ='favouritestyle' value="Fav" onclick="add_favourite(value)"> Add tour to Favourite</button>
+
+  <form  action="{% url 'export_to' %}"  method="GET">
+
+  <table id="final_tour_table" >
+    <tr>
+      <td>Name</td>
+      <td>Rating</td>
+      <td>Distance</td>
+    </tr>
+
+  </table>
+  <button type="submit" name="Download" value="Download as CSV" onclick="parse_htmltable(value)" >Download as CSV</button>
+  <button type="submit" name="Download" value="Download as PDF" onclick="parse_htmltable(value)" >Download as PDF</button>
+  <button type="submit" name="Download" value="Download as JSON" onclick="parse_htmltable(value)">Download as JSON</button>
+  <!--<button type="button" name="Download" value="DownLload as csv" onclick="location.href='{% url 'export_to' %}'" > Download as CSV</button> -->
+  </form>
+
+
+  <body onload=existing_favourite()><p id='favour'></p>
+  <table id="favourite_tour_table" ></table>
+  </body>
+
+
+
+
+
+
+  </div>
+
+
+{% endblock %}

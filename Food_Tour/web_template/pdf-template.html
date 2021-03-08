@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>PDF file</title>
+  </head>
+  <body>
+
+    <h1>FOOD TOUR LIST</h1>
+    <table cellspacing="0" rules="all" border="1" id="tour_table" >
+      <thead>
+      <tr>
+        <th>Restaurant_Name</th>
+        <th>Rating</th>
+        <th>Distance_in_miles</th>
+      </tr>
+      </thead>
+    <tbody>
+      {% for row in data %}
+      <tr>
+        <td>{{row.name}}</td><td>{{row.rating}}</td><td>{{row.distance_in_miles}}</td>
+      </tr>
+      {% endfor %}
+
+    </table
+  </body>
+</html>

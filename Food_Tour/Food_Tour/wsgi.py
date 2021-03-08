@@ -1,5 +1,5 @@
 """
-WSGI config for FoodTour_application project.
+WSGI config for Food_Tour project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'FoodTour_application.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Food_Tour.settings')
 
 application = get_wsgi_application()
