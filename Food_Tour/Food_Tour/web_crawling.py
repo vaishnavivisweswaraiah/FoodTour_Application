@@ -24,7 +24,10 @@ def sort_dataframe(dataframe,sort_feature='rating',sort_by_asc=False):
 
 #function convert dataframe to html renderable json format
 def convert_dataframe_json(dataframe):
-    json_records=dataframe.to_json(orient ='records')
+    try:
+        json_records=dataframe.to_json(orient ='records')
+    except Exception as e:
+        print("exception occured at convert_dataframe_json",e)
     return json.loads(json_records )
 
 #function to convert list to dataframe

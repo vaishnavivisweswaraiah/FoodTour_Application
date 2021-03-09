@@ -9,9 +9,9 @@
         <form  action="{% url 'filter_sort' %}" method="post">  {% csrf_token%}
                 <h2>Sort and filter </h2>
                 <div class="inner-filter">
-                  <fieldset> <legend>Filter </legend><br>
+                  <fieldset> <legend><h3>Filter </h3></legend><br>
                     <div class="input-field first-wrap">
-                      <input list="restaurant_name" name="restaurant_name" placeholder="Type in restaurant_name">
+                      <input list="restaurant_name" name="restaurant_name" placeholder="Type restaurant_name">
                         <datalist  id="restaurant_name">
                           <option disabled="true" selected></option>{% for row in table %}<option value={{row.name}}>{{row.name}}</option>{% endfor %}
                         </datalist>
@@ -32,7 +32,7 @@
 
 
             <div class="inner-sort">
-              <fieldset><legend>Sort</legend><br>
+              <fieldset><legend><h3>Sort</h3></legend><br>
                 <div class="input-field second-wrap">
                   <select name="sort-select" >
                       <option disabled="true" selected>by_any_Rating</option>
@@ -90,7 +90,7 @@
             <form  action="{% url 'export_to' %}"  method="post"> {% csrf_token%}
               <fieldset><legend><h2>Your Food Tour</h2></legend>
                 <table class="final-tour-table" id="final-tour-table" >
-                  <tr><td>Name</td><td>Rating</td> <td>Distance</td></tr>
+                  <tr><th>Name</th><th>Rating</th> <th>Distance</th></tr>
                 </table><br><br>
                 <button type="button" name="Favourite" class ='btn-favourite' value="Fav" onclick="add_favourite(value)"> Add to Favourite</button>
                 <button type="submit" name="Download"  class ='btn-download' value="Download as CSV" onclick="parse_htmltable(value)" >Download as CSV</button>
@@ -99,11 +99,13 @@
               </fieldset>
             </form>
           </div><br>
-        <div class="persistant-favourite">
+
           <body onload=existing_favourite()>
+            <div class="persistant-favourite">
             <table class="favourite-tour-table" id="favourite-tour-table"  ></table>
+            </div>
           </body>
-        </div>
+
       </div>
     </div>
   </div>

@@ -137,7 +137,16 @@ function parse_htmltable(filetype){
       }
 
   else{
-
+    $.ajax({
+      //
+      type:'get',
+      url : 'convert_text_dataframe',
+      async: false,
+      data :{table_content:table_content , convert_to: filetype },
+      success:function(){
+          console.log("sucessfuly reset data values when no food item is added to tour list");
+      }
+    })
     alert("You have made no selection .please add list to tour and try again");
     return false;
   }
