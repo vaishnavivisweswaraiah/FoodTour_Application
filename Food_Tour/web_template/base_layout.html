@@ -2,43 +2,53 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src={% static 'tour.js' %}></script>
     <link rel="stylesheet" href={% static 'tour.css' %}>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
   </head>
-  <body >
-    <h1>FORM</h1>
-    <form  action="{% url 'result' %}" method="post" >
-      {% csrf_token%}
-      <label for="Food_Category">Enter Food Category : </label>
-      <input type="text" name="Food_Category"  placeholder="e.g sushi,burgers" required><br><br>
+  <body>
+    <div class="header">
+          <div class="search-form">
+            <form  action="{% url 'result' %}" method="post" > {% csrf_token%}
+              <fieldset>
+                <legend>Find Food Near Me</legend>
+                  <div class="inner-form">
+                      <div class="input-field first-wrap">
+                        <input id="Food_Category" type="text" name="Food_Category"  placeholder="Food Type ? e.g.,Sushi" required oninvalid="this.setCustomValidity('Food type is must')" onchange="this.setCustomValidity('')">
+                      </div>
+                      <div class="input-field second-wrap">
+                       <input id="location" type="text" name="location" value="" placeholder="Location" required oninvalid="this.setCustomValidity('location is must')" onchange="this.setCustomValidity('')" >
+                      </div>
+                      <div class="input-field third-wrap">
+                        <select id="country" name="country">
+                          <option disabled="true" selected>Country</option>
+                          <option value='US'>US</option>
+                        </select>
+                      </div>
+                      <div class="input-field fourth-wrap">
+                        <input id="radius" type="number" name="radius" min='1' max='24' placeholder="Radius-miles" required oninvalid="this.setCustomValidity('Entering radius in miles is must')" onchange="this.setCustomValidity('')" >
+                      </div>
+                      <div class="input-field fifth-wrap">
+                        <input id="Search" class='btn-search' type="submit" name="Search" value="Search">
+                      </div>
+                  </div>
+              </fieldset>
+            </form>
+          </div>
+      </div>
+      {% block content %}
+      {% endblock  %}
 
-      <label for="address1" >Address1 : </label>
-      <input type="text" name="address1" value="" placeholder=" e.g 1467 Bakers st" >
-      <label for="address2" >Address2 : </label>
-      <input type="text" name="address2" value="" >
-      <label for="city" >City : </label>
-      <input type="text" name="city" value="" required>
-      <label for="state" >State : </label>
-      <input type="text" name="state" value="" required><br><br>
 
-      <label for="country">Country: </label>
-      <select name="country" >
-        <option disabled="true" selected>Country</option>
-        <option value='US'>US</option>
-      </select>
-      <label for="zipcode" >Zipcode : </label>
-      <input type="number" name="zipcode" value="" placeholder=" e.g 45324" required><br><br>
-      <label for="radius">Enter radius in miles : </label>
-      <input type="number" name="radius" min='1' max='24' value='1' required><br><br>
-      <input type="submit" name="Search" value="Search">
-    </form>
-    {% block content %}
-    {% endblock  %}
+
+
+
+
 
   </body>
 </html>

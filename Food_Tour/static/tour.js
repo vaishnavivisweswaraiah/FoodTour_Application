@@ -3,15 +3,18 @@ var row
 var table_content="\n"
 var favourite_json
 
+var final_tour_table="final-tour-table"
+var favourite_tour_table="favourite-tour-table"
+//test
 //adds user selected restaurants to final_tour_table
 function addTour(){
-        //html checkbox parent id  .
+        //html checkbox parent id  search result table .
         var e = event.target.parentNode.parentNode.id;
         var row_item=document.getElementById(e);
-        //Reference the CheckBoxe in Table.
+        //Reference the CheckBox in Table.
         var active_checkbox = row_item.getElementsByTagName("INPUT");
-        //find target final tour table table element
-        var table=document.getElementById("final_tour_table");
+        //find target final food tour table table element
+        var table=document.getElementById(final_tour_table);
         //check for active checkbox
         if (active_checkbox[0].checked) {
                 //create row and set attributes to it
@@ -51,7 +54,7 @@ function insert_cell(rowObject,cell_number,cell_data){
 function remove_favourite(){
     row_key = event.target.parentNode.parentNode.id;
     //remove from html table
-    document.getElementById("favourite_tour_table").rows.namedItem(row_key).remove();
+    document.getElementById(favourite_tour_table).rows.namedItem(row_key).remove();
     //remove from local storage
     localStorage.removeItem(row_key);
 
@@ -60,7 +63,7 @@ function existing_favourite(){
       for (l=0 ; l < localStorage.length ;l++){
         key=localStorage.key(l);
         if (key.match('FoodTour')){
-          display_favourtie(document.getElementById("favourite_tour_table"),key);
+          display_favourtie(document.getElementById(favourite_tour_table),key);
         }
       }
 
@@ -75,7 +78,7 @@ function display_favourtie(favourite_table,localStorage_key){
     json_obj=JSON.parse(localStorage.getItem(localStorage_key));
     for(j=0;j<json_obj.length ;j++){
       fav_data += (j+1)+"."+ json_obj[j].name +"\t"+json_obj[j].rating+"\t"+json_obj[j].distance_in_miles+"<br>" ;}
-    insert_cell(favourite_row,0,'Favourite tour:');
+    insert_cell(favourite_row,0,'Favourite tour list:');
     insert_cell(favourite_row,1,fav_data);
     insert_cell(favourite_row,2,"<input type='button' value='Remove' name='Remove' onclick=remove_favourite();>");
 
@@ -83,21 +86,24 @@ function display_favourtie(favourite_table,localStorage_key){
 
 //Adds user selecetd  tour list to favourite and keep the data persistant in local storage
 function add_favourite(submit_value){
-        let localstorage_key = 'FoodTour_'+ ( Math.random() * 100);
-        parse_htmltable(submit_value) //parse html table
-        //console.log(favourite_json)
-        localStorage.setItem(localstorage_key,favourite_json)
-        //fetch recently added value into localStorage and render it to viewer
-        //keys=localStorage.key(localStorage.length-1);
-        //fetch table id and add new rows and display  each favourite item added
-        var favourite_table=document.getElementById("favourite_tour_table");
-        //call to display favourites
-        display_favourtie(favourite_table,localstorage_key)
+        var parse_status=parse_htmltable(submit_value)
+        if(parse_status){
+            let localstorage_key = 'FoodTour_'+ ( Math.random() * 100);
+             //parse html table
+            console.log(favourite_json)
+            localStorage.setItem(localstorage_key,favourite_json)
+            //fetch recently added value into localStorage and render it to viewer
+            //keys=localStorage.key(localStorage.length-1);
+            //fetch table id and add new rows and display  each favourite item added
+            var favourite_table=document.getElementById(favourite_tour_table);
+            //call to display favourites
+            display_favourtie(favourite_table,localstorage_key)
         }
+}
 
 function parse_htmltable(filetype){
-
-      var rows=document.getElementById("final_tour_table").rows;
+      //fetch values from final tour table in html
+      var rows=document.getElementById(final_tour_table).rows;
 
       if (rows.length > 1){
         for(i=1 ;i <rows.length ;i++){
@@ -120,16 +126,20 @@ function parse_htmltable(filetype){
             //saving item as json object user button value type is favourite
             if (filetype =="Fav"){
                 favourite_json= response;
+
             }
             table_content = " ";
             filetype = " ";
-            //return response
+            //return response;
           }
         })
+        return true;
       }
 
   else{
-    alert("You have made no selection .please add list to tour and try again")
+
+    alert("You have made no selection .please add list to tour and try again");
+    return false;
   }
 }
 
