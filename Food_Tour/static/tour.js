@@ -77,10 +77,10 @@ function display_favourtie(favourite_table,localStorage_key){
     //fetch localstorage data
     json_obj=JSON.parse(localStorage.getItem(localStorage_key));
     for(j=0;j<json_obj.length ;j++){
-      fav_data += (j+1)+"."+ json_obj[j].name +"\t"+json_obj[j].rating+"\t"+json_obj[j].distance_in_miles+"<br>" ;}
-    insert_cell(favourite_row,0,'Favourite tour list:');
+      fav_data += (j+1)+"."+"Restaurant "+ json_obj[j].name +" \t with "+json_obj[j].rating+" rating \t at "+json_obj[j].distance_in_miles+" distance. <br>" ;}
+    insert_cell(favourite_row,0,'Favourite tour list');
     insert_cell(favourite_row,1,fav_data);
-    insert_cell(favourite_row,2,"<input type='button' value='Remove' name='Remove' onclick=remove_favourite();>");
+    insert_cell(favourite_row,2,"<button type='button' value='Remove' name='Remove' onclick=remove_favourite();> Remove </button>");
 
 }
 

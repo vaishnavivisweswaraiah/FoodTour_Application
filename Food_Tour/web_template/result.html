@@ -7,6 +7,7 @@
     <!---left column layout on webpage-->
     <div class="filter-sort-left">
         <form  action="{% url 'filter_sort' %}" method="post">  {% csrf_token%}
+                <h2>Sort and filter </h2>
                 <div class="inner-filter">
                   <fieldset> <legend>Filter </legend><br>
                     <div class="input-field first-wrap">
@@ -48,7 +49,7 @@
             </div>
             <!--sort/filter button-->
             <div class="input-field submit-wrap">
-              <input id="Search" class='btn-filter-sort' type="submit" name="Go" value="Go">
+              <button id="Search" class='btn-filter-sort' type="submit" name="Go" value="Go">Go </button>
             </div>
 
       </form>
@@ -58,7 +59,7 @@
       <div class="result-table">
         <h2>Top Restaurants list</h2>
           {% if table %}
-          <table id="tour_table" >
+          <table class="tour_table" id="tour_table" >
             <thead> <tr>
                         {% for table_names in Table_header %}
                             <th>{{table_names}}</th>
@@ -88,19 +89,21 @@
           <div class="favourite-tour-form">
             <form  action="{% url 'export_to' %}"  method="post"> {% csrf_token%}
               <fieldset><legend><h2>Your Food Tour</h2></legend>
-                <table id="final-tour-table" >
+                <table class="final-tour-table" id="final-tour-table" >
                   <tr><td>Name</td><td>Rating</td> <td>Distance</td></tr>
-                </table>
-                <button type="button" name="Favourite" class ='btn-favourite' value="Fav" onclick="add_favourite(value)"> Add tour to Favourite</button>
-                <button type="submit" name="Download" value="Download as CSV" onclick="parse_htmltable(value)" >Download as CSV</button>
-                <button type="submit" name="Download" value="Download as PDF" onclick="parse_htmltable(value)" >Download as PDF</button>
-                <button type="submit" name="Download" value="Download as JSON" onclick="parse_htmltable(value)">Download as JSON</button>
+                </table><br><br>
+                <button type="button" name="Favourite" class ='btn-favourite' value="Fav" onclick="add_favourite(value)"> Add to Favourite</button>
+                <button type="submit" name="Download"  class ='btn-download' value="Download as CSV" onclick="parse_htmltable(value)" >Download as CSV</button>
+                <button type="submit" name="Download"  class ='btn-download' value="Download as PDF" onclick="parse_htmltable(value)" >Download as PDF</button>
+                <button type="submit" name="Download"  class ='btn-download' value="Download as JSON" onclick="parse_htmltable(value)">Download as JSON</button>
               </fieldset>
             </form>
-          </div><br><br>
+          </div><br>
+        <div class="persistant-favourite">
           <body onload=existing_favourite()>
-            <table id="favourite-tour-table" ></table>
+            <table class="favourite-tour-table" id="favourite-tour-table"  ></table>
           </body>
+        </div>
       </div>
     </div>
   </div>
