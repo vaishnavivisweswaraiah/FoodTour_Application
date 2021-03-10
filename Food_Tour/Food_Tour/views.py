@@ -18,7 +18,7 @@ def home(re):
 #Fetch submit request and do query serach through yelp api and render the result on the html
 def result(re):
         global output,radius,distance_values,location
-        food_input=re.POST["Food_Category"]+" food"
+        food_input="food "+re.POST["Food_Category"]
         location = re.POST["location"]
         country = re.POST.get("country",'US')
         radius = int(re.POST["radius"]) # converting miles to meteres
