@@ -18,7 +18,7 @@ def home(re):
 #Fetch submit request and do query serach through yelp api and render the result on the html
 def result(re):
         global output,radius,distance_values,location
-        food_input="food "+re.POST["Food_Category"]
+        food_input=re.POST["Food_Category"]+" food"
         location = re.POST["location"]
         country = re.POST.get("country",'US')
         radius = int(re.POST["radius"]) # converting miles to meteres
@@ -46,9 +46,9 @@ def filter_sort(re):
     rating_value = re.POST.get('rating_values','0.0 and up')
     distance_value= re.POST.get('distance_values',radius)
     restaurant_name=re.POST.get('restaurant_name',r'^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$')
-    output=convert_list_DataFrame(list=output)
-    output=sort_dataframe(dataframe=output,sort_feature=sort_feature,sort_by_asc=sort_type)
-    temporal_output=filter_dataframe(dataframe=output,rating=rating_value,distance=distance_value,name=restaurant_name)
+    _output=convert_list_DataFrame(list=output)
+    _output=sort_dataframe(dataframe=_output,sort_feature=sort_feature,sort_by_asc=sort_type)
+    temporal_output=filter_dataframe(dataframe=_output,rating=rating_value,distance=distance_value,name=restaurant_name)
     distance_values=list((range(1,radius+1)))
     response_dic = {
          'table' : convert_dataframe_json(dataframe=temporal_output) ,
@@ -100,7 +100,7 @@ def export_to(re):
         elif downloadType=="None":
             #response dictionary
             response_dic = {
-                 'table' :output ,
+                 'table' : output,
                  'Table_header':Table_header,
                  'sort_list':sort_list,
                  'sort_by':sort_by,
