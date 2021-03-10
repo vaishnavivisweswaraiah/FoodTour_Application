@@ -8,9 +8,9 @@ def filter_dataframe(dataframe,rating,distance,name):
 
     rating_value=eval(rating.split("and")[0])
     distance_value=float(distance)
-    restaurant_name=name.title()
+    restaurant_name=name
     return dataframe[(dataframe['rating'] >= rating_value) & (dataframe['distance'] <= distance_value) & \
-                      (dataframe['name'].str.contains(restaurant_name)) ]
+                      (dataframe['name'].str.contains(restaurant_name,case=False)) ]
 
 
 #function to add sorting and filters to dataframe
@@ -50,9 +50,9 @@ def process_request(search_params,filter_columns):
     headers = {'Authorization': 'Bearer %s' % api_key}
     JSON_response = requests.get(url,headers=headers,params=search_params).json()
     #handling exception for null response from API
-    result=process_JSON(JSON_response,filter_columns)
-    result=sort_dataframe(result)
-    result=convert_dataframe_json(result)
+    result_df=process_JSON(JSON_response,filter_columns)
+    result_df=sort_dataframe(result_df)
+    result=convert_dataframe_json(result_df)
     return result
 
 #function to process table content retrived from html using js and sent to convert_text_dataframe python function in views.py

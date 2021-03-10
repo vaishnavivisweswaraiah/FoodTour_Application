@@ -38,7 +38,7 @@ def result(re):
              'givenLocation' : location
         }
         return render(re,'result.html',response_dic)
-
+#filters and sorts the user request
 def filter_sort(re):
     global output,radius,distance_values
     sort_feature=(re.POST.get('sort-select',sort_list[1])).lower()
@@ -74,7 +74,7 @@ def tableContentToDataframe(re):
     else:
         downloadType=filetype
     return HttpResponse(response_js)
-
+#Downloads file in user requested filetype
 def export_to(re):
     try:
         global output,location
@@ -98,9 +98,9 @@ def export_to(re):
             #creating the pdf
             pisa_status=pisa.CreatePDF(html ,dest=response)
         elif downloadType=="None":
-            print("Executing else part")
+            #response dictionary
             response_dic = {
-                'table' :output ,
+                 'table' :output ,
                  'Table_header':Table_header,
                  'sort_list':sort_list,
                  'sort_by':sort_by,
@@ -108,7 +108,7 @@ def export_to(re):
                  'distance_values':distance_values,
                  'givenLocation' : location
             }
-            return render(re,'result.html',response_dic)
+            response = render(re,'result.html',response_dic)
 
         return response
     except Exception as e:

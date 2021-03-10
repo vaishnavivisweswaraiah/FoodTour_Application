@@ -5,8 +5,7 @@
 <main>
   <div class="row">
     <!---left column layout on webpage-->
-
-    <div class="filter-sort-left">
+    <div class="column-left">
         <form  action="{% url 'filter_sort' %}" method="post">  {% csrf_token%}
                 <h2>Sort and filter </h2>
                 <div class="inner-filter">
@@ -49,28 +48,22 @@
               </fieldset>
             </div>
             <!--sort/filter button-->
-            {% if table %}
+
             <div class="input-field submit-wrap">
+              {% if table %}
               <button id="Go" class='btn-filter-sort' type="submit" name="Go" value="Go">Go</button>
+              {% endif %}
+              {% if not table %}
+              <button id="Go" class='btn-filter-sort' type="submit" name="Go" value="Go" disabled>Go</button>
+              {% endif %}
               <button id="Reset" class='btn-filter-sort' type="submit" name="Reset" value="Reset">Reset</button>
             </div>
-            {% endif %}
-
-            {% if not table %}
-            <div class="input-field submit-wrap">
-              <button id="Go" class='btn-filter-sort' type="submit" name="Go" value="Go" disabled>Go</button>
-              <button id="Reset" class='btn-filter-sort' type="submit" name="Reset" value="Reset" disabled>Reset</button>
-            </div>
-            {% endif %}
-
-
-
       </form>
     </div>
     <!---middle column layout on webpage-->
     <div class="column-center">
       <div class="result-table">
-        <h2>Top Restaurants list <h3 id='searchLocation'>{{givenLocation}}</h3> </h2>
+        <h2>Top Restaurants near {{givenLocation}} </h2>
           {% if table %}
           <table class="tour_table" id="tour_table" >
             <thead> <tr>
@@ -92,7 +85,7 @@
         {% endif %}
 
         {% if not table %}
-            <h3>No search Result</h3>
+            <h3 id="NoSearchFound">No search Result</h3>
         {% endif %}
       </div>
     </div>
@@ -122,5 +115,6 @@
       </div>
     </div>
   </div>
+
 </main>
 {% endblock %}

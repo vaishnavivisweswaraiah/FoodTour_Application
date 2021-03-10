@@ -1,10 +1,9 @@
 var row_count=1
-var row
 var favourite_json
 
 var final_tour_table="final-tour-table"
 var favourite_tour_table="favourite-tour-table"
-//test
+
 //adds user selected restaurants to final_tour_table
 function addTour(){
         //html checkbox parent id  search result table .
@@ -83,7 +82,7 @@ function display_favourtie(favourite_table,localStorage_key){
 
 }
 
-//Adds user selecetd  tour list to favourite and keep the data persistant in local storage
+//Adds user selected  tour list to favourite and keep the data persistant in local storage
 function add_favourite(submit_value){
         //parse html table
         var parse_status=parse_htmltable(submit_value);
@@ -161,6 +160,7 @@ function parse_htmltable(filetype){
   }
 }
 
+var row
 //functions to handle drag and drop  events
 function dragStart(){
     //hold reference for current dragged row
