@@ -22,8 +22,8 @@ urlpatterns = [
     path('',views.home,name='home'),
     path('result/',views.result,name='result'),
     path('filter_sort',views.filter_sort,name='filter_sort'),
-    path('result/convert_text_dataframe/',views.convert_text_dataframe,name='convert_text_dataframe'),
-    path('convert_text_dataframe',views.convert_text_dataframe,name='convert_text_dataframe'),
+    path('result/tableContentToDataframe/',views.tableContentToDataframe,name='tableContentToDataframe'),
+    path('tableContentToDataframe',views.tableContentToDataframe,name='tableContentToDataframe'),
     path('export_to',views.export_to,name='export_to')
 
 ]

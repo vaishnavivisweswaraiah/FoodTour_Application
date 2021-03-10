@@ -6,18 +6,18 @@ from . web_crawling import *
 
 Table_header = ['Image','Restaurant_Name','Rating','Distance','Add to Tour']
 filter_list = ['name','rating','distance','id','image_url'] #To fetch required data
-sort_list = ['name','rating','distance'] #sort by given fields
+sort_list = ['Name','Rating','Distance'] #sort by given fields
 sort_by = ['Ascending','Descending'] #sort by given category
 rating_values = ['4.5 and up','4.0 and up','3.0 and up','2.0 and up'] #filter by ratings with rating_values
-global output , radius, distance_values,filetype,data #global variables to store locally search results for further processings
+global output , radius, distance_values,downloadType,downloaddata,location #global variables to store locally search results for further processings
 
-
+#application start from index.html
 def home(re):
     return render(re,'index.html')
 
 #Fetch submit request and do query serach through yelp api and render the result on the html
 def result(re):
-        global output,radius,distance_values
+        global output,radius,distance_values,location
         food_input="food "+re.POST["Food_Category"]
         location = re.POST["location"]
         country = re.POST.get("country",'US')
@@ -29,18 +29,19 @@ def result(re):
               {'term':food_input,'location':location,'radius':int(radius * 1609.34) },filter_columns=filter_list)
         #response dictionary
         response_dic = {
-            'table' :output ,
+             'table' :output ,
              'Table_header':Table_header,
              'sort_list':sort_list,
              'sort_by':sort_by,
              'rating_values':rating_values,
-             'distance_values':distance_values
+             'distance_values':distance_values,
+             'givenLocation' : location
         }
         return render(re,'result.html',response_dic)
 
 def filter_sort(re):
     global output,radius,distance_values
-    sort_feature=re.POST.get('sort-select',sort_list[1])
+    sort_feature=(re.POST.get('sort-select',sort_list[1])).lower()
     sort_type=re.POST.get('sort-type',sort_by[1])
     rating_value = re.POST.get('rating_values','0.0 and up')
     distance_value= re.POST.get('distance_values',radius)
@@ -50,63 +51,66 @@ def filter_sort(re):
     temporal_output=filter_dataframe(dataframe=output,rating=rating_value,distance=distance_value,name=restaurant_name)
     distance_values=list((range(1,radius+1)))
     response_dic = {
-        'table' : convert_dataframe_json(dataframe=temporal_output) ,
+         'table' : convert_dataframe_json(dataframe=temporal_output) ,
          'Table_header':Table_header,
          'sort_list':sort_list,
          'sort_by':sort_by,
          'rating_values':rating_values,
-         'distance_values':distance_values
+         'distance_values':distance_values,
+         'givenLocation' : location
     }
     return render(re,'result.html',response_dic)
 
-
-def convert_text_dataframe(re):
+#Fetch processed final_tour_table data and set downloaddata to json
+def tableContentToDataframe(re):
+    global downloaddata, downloadType
     response_js = None
-    try:
-        global data, filetype
-        data = re.GET.get('table_content'," ")
-        filetype = re.GET.get("convert_to" ," ")
-        print(type(data))
-        print(data)
-        if len(data) > 1 :
-            data = process_text(data)
-            response_js=json.dumps(convert_dataframe_json(data),indent=4)
-
-    except Exception as e:
-        print("error occured at convert_text_dataframe",e)
-
+    textData = re.GET.get('table_content'," ")
+    filetype = re.GET.get("convert_to" ," ")
+    if textData != "noData" :
+        downloaddata = process_text(textData)
+        downloadType=filetype
+        response_js=json.dumps(convert_dataframe_json(downloaddata),indent=4)
+    else:
+        downloadType=filetype
     return HttpResponse(response_js)
 
 def export_to(re):
     try:
-        if filetype == "Download as CSV":
-            response=HttpResponse(data.to_csv(index=False),content_type='text/csv')
-            response['content-Disposition']='attachment;filename=Finalized_Tour'+str(datetime.datetime.now())+'.csv'
+        global output,location
+        filename='Finalized_Tour'
+        if downloadType == "Download as CSV":
+            response=HttpResponse(downloaddata.to_csv(index=False),content_type='text/csv')
+            response['content-Disposition']='attachment;filename='+filename+str(datetime.datetime.now())+'.csv'
 
-        if filetype == "Download as JSON":
-            response=HttpResponse(json.dumps(convert_dataframe_json(data),indent =4),content_type='application/json')
-            response['content-Disposition']='attachment;filename=Finalized_Tour'+str(datetime.datetime.now())+'.json'
+        if downloadType == "Download as JSON":
+            response=HttpResponse(json.dumps(convert_dataframe_json(downloaddata),indent =4),content_type='application/json')
+            response['content-Disposition']='attachment;filename='+filename+str(datetime.datetime.now())+'.json'
 
-        if filetype == "Download as PDF":
-            content={ 'data' : convert_dataframe_json(data)}
+        if downloadType == "Download as PDF":
+            content={ 'downloaddata' : convert_dataframe_json(downloaddata)}
             #creating django response object
             response = HttpResponse(content_type='application/pdf')
-            response['content-Disposition']='attachment;filename=Finalized_Tour'+str(datetime.datetime.now())+'.pdf'
+            response['content-Disposition']='attachment;filename='+filename+str(datetime.datetime.now())+'.pdf'
             #find tempalate and render it
             template = loader.get_template('pdf-template.html')
             html=template.render(content) # rendering content to html file
             #creating the pdf
             pisa_status=pisa.CreatePDF(html ,dest=response)
-
-
-    except Exception as e:
-            print("Exception occured at export_to",e) 
+        elif downloadType=="None":
+            print("Executing else part")
+            response_dic = {
                 'table' :output ,
                  'Table_header':Table_header,
                  'sort_list':sort_list,
                  'sort_by':sort_by,
                  'rating_values':rating_values,
-                 'distance_values':distance_values
+                 'distance_values':distance_values,
+                 'givenLocation' : location
             }
             return render(re,'result.html',response_dic)
-    return response
+
+        return response
+    except Exception as e:
+
+        print("Error occured while rendering page",e)

@@ -1,6 +1,5 @@
 var row_count=1
 var row
-var table_content="\n"
 var favourite_json
 
 var final_tour_table="final-tour-table"
@@ -77,7 +76,7 @@ function display_favourtie(favourite_table,localStorage_key){
     //fetch localstorage data
     json_obj=JSON.parse(localStorage.getItem(localStorage_key));
     for(j=0;j<json_obj.length ;j++){
-      fav_data += (j+1)+"."+"Restaurant "+ json_obj[j].name +" \t with "+json_obj[j].rating+" rating \t at "+json_obj[j].distance_in_miles+" distance. <br>" ;}
+      fav_data += (j+1)+"."+"Restaurant "+ json_obj[j].name +" \t with "+json_obj[j].rating+" rating \t at "+json_obj[j].distance_in_miles+" miles distance. <br>" ;}
     insert_cell(favourite_row,0,'Favourite tour list');
     insert_cell(favourite_row,1,fav_data);
     insert_cell(favourite_row,2,"<button type='button' value='Remove' name='Remove' onclick=remove_favourite();> Remove </button>");
@@ -86,18 +85,30 @@ function display_favourtie(favourite_table,localStorage_key){
 
 //Adds user selecetd  tour list to favourite and keep the data persistant in local storage
 function add_favourite(submit_value){
-        var parse_status=parse_htmltable(submit_value)
+        //parse html table
+        var parse_status=parse_htmltable(submit_value);
+        let redundantFavourite = false;
         if(parse_status){
             let localstorage_key = 'FoodTour_'+ ( Math.random() * 100);
-             //parse html table
-            console.log(favourite_json)
-            localStorage.setItem(localstorage_key,favourite_json)
-            //fetch recently added value into localStorage and render it to viewer
-            //keys=localStorage.key(localStorage.length-1);
-            //fetch table id and add new rows and display  each favourite item added
-            var favourite_table=document.getElementById(favourite_tour_table);
-            //call to display favourites
-            display_favourtie(favourite_table,localstorage_key)
+            //check for redundancy addition of content to favourites
+            for (l=0 ; l < localStorage.length ;l++){
+              key=localStorage.key(l);
+              if (key.match('FoodTour') && redundantFavourite==false){
+                if ( favourite_json == localStorage.getItem(key)){
+                  redundantFavourite=true;
+                  alert("Favourite already exists");
+                }
+              }
+            }
+            if(redundantFavourite==false){
+              console.log("favouritejson",favourite_json);
+              localStorage.setItem(localstorage_key,favourite_json);
+              //fetch table id and add new rows and display  each favourite item added
+              var favourite_table=document.getElementById(favourite_tour_table);
+              //call to display favourites
+              display_favourtie(favourite_table,localstorage_key);
+              }
+
         }
 }
 
@@ -105,7 +116,9 @@ function parse_htmltable(filetype){
       //fetch values from final tour table in html
       var rows=document.getElementById(final_tour_table).rows;
 
+
       if (rows.length > 1){
+        table_content="\n"
         for(i=1 ;i <rows.length ;i++){
           //table_content+=rows[0].cells[0].innerHTML; //first column name
           table_content+=rows[i].cells[0].innerHTML+"\t";
@@ -118,19 +131,15 @@ function parse_htmltable(filetype){
         $.ajax({
           //work on crsf token
           type:'get',
-          url : 'convert_text_dataframe',
+          url : 'tableContentToDataframe',
           async: false,
           data :{table_content:table_content , convert_to: filetype },
           success:function(response){
-            //console.log(response)
             //saving item as json object user button value type is favourite
-            if (filetype =="Fav"){
+            if (filetype == "Fav"){
                 favourite_json= response;
-
+                //console.log(favourite_json);
             }
-            table_content = " ";
-            filetype = " ";
-            //return response;
           }
         })
         return true;
@@ -138,16 +147,16 @@ function parse_htmltable(filetype){
 
   else{
     $.ajax({
-      //
+      //work on crsf token
       type:'get',
-      url : 'convert_text_dataframe',
+      url : 'tableContentToDataframe',
       async: false,
-      data :{table_content:table_content , convert_to: filetype },
+      data :{table_content:"noData" , convert_to: "None" },
       success:function(){
-          console.log("sucessfuly reset data values when no food item is added to tour list");
-      }
-    })
-    alert("You have made no selection .please add list to tour and try again");
+        console.log("Data download value is reset to null");
+        }
+      })
+    alert("You made no selection.Please add your choice to tour list and try again.");
     return false;
   }
 }

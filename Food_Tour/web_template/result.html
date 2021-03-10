@@ -5,25 +5,26 @@
 <main>
   <div class="row">
     <!---left column layout on webpage-->
+
     <div class="filter-sort-left">
         <form  action="{% url 'filter_sort' %}" method="post">  {% csrf_token%}
                 <h2>Sort and filter </h2>
                 <div class="inner-filter">
                   <fieldset> <legend><h3>Filter </h3></legend><br>
                     <div class="input-field first-wrap">
-                      <input list="restaurant_name" name="restaurant_name" placeholder="Type restaurant_name">
+                      <input list="restaurant_name" name="restaurant_name" placeholder="Type Restaurant Name">
                         <datalist  id="restaurant_name">
                           <option disabled="true" selected></option>{% for row in table %}<option value={{row.name}}>{{row.name}}</option>{% endfor %}
                         </datalist>
                     </div><br>
                     <div class="input-field second-wrap">
                       <select name="rating_values">
-                          <option disabled="true" selected>by_any_Rating</option>{% for r_value in rating_values %}<option value={{r_value}}>{{r_value}}</option>{% endfor %}
+                          <option disabled="true" selected>By-Any-Rating</option>{% for r_value in rating_values %}<option value={{r_value}}>{{r_value}}</option>{% endfor %}
                       </select>
                     </div><br>
                     <div class="input-field third-wrap">
                       <select name="distance_values">
-                        <option disabled="true" selected>by_any_Radius</option>
+                        <option disabled="true" selected>By-Any-Radius</option>
                         {% for d_value in distance_values %}<option value={{d_value}}>{{d_value}}</option>{% endfor %}
                       </select><br>
                     </div>
@@ -35,29 +36,41 @@
               <fieldset><legend><h3>Sort</h3></legend><br>
                 <div class="input-field second-wrap">
                   <select name="sort-select" >
-                      <option disabled="true" selected>by_any_Rating</option>
+                      <option disabled="true" selected>By-Any-Rating</option>
                       {% for category in sort_list %} <option value={{category}} >{{category}}</option>{% endfor %}
                   </select>
                 </div><br>
                 <div class="input-field third-wrap">
                   <select name="sort-type" >
-                      <option disabled="true" selected>in_Descending</option>
+                      <option disabled="true" selected>In-Descending</option>
                       {% for type in sort_by %}<option value={{type}} >{{type}}</option>{% endfor %}
                   </select>
                 </div><br>
               </fieldset>
             </div>
             <!--sort/filter button-->
+            {% if table %}
             <div class="input-field submit-wrap">
-              <button id="Search" class='btn-filter-sort' type="submit" name="Go" value="Go">Go </button>
+              <button id="Go" class='btn-filter-sort' type="submit" name="Go" value="Go">Go</button>
+              <button id="Reset" class='btn-filter-sort' type="submit" name="Reset" value="Reset">Reset</button>
             </div>
+            {% endif %}
+
+            {% if not table %}
+            <div class="input-field submit-wrap">
+              <button id="Go" class='btn-filter-sort' type="submit" name="Go" value="Go" disabled>Go</button>
+              <button id="Reset" class='btn-filter-sort' type="submit" name="Reset" value="Reset" disabled>Reset</button>
+            </div>
+            {% endif %}
+
+
 
       </form>
     </div>
     <!---middle column layout on webpage-->
     <div class="column-center">
       <div class="result-table">
-        <h2>Top Restaurants list</h2>
+        <h2>Top Restaurants list <h3 id='searchLocation'>{{givenLocation}}</h3> </h2>
           {% if table %}
           <table class="tour_table" id="tour_table" >
             <thead> <tr>

@@ -8,7 +8,7 @@
   <body>
 
     <h1>FOOD TOUR LIST</h1>
-    <table cellspacing="0" rules="all" border="1" id="tour_table" >
+    <table cellspacing="0" rules="all" style="text-align:center;" >
       <thead>
       <tr>
         <th>Restaurant_Name</th>
@@ -17,12 +17,12 @@
       </tr>
       </thead>
     <tbody>
-      {% for row in data %}
+      {% for row in downloaddata %}
       <tr>
         <td>{{row.name}}</td><td>{{row.rating}}</td><td>{{row.distance_in_miles}}</td>
       </tr>
       {% endfor %}
 
-    </table
+    </table>
   </body>
 </html>

@@ -24,11 +24,9 @@ def sort_dataframe(dataframe,sort_feature='rating',sort_by_asc=False):
 
 #function convert dataframe to html renderable json format
 def convert_dataframe_json(dataframe):
-    try:
-        json_records=dataframe.to_json(orient ='records')
-    except Exception as e:
-        print("exception occured at convert_dataframe_json",e)
-    return json.loads(json_records )
+    json_records=dataframe.to_json(orient ='records')
+    json_records=json.loads(json_records )
+    return json_records
 
 #function to convert list to dataframe
 def convert_list_DataFrame(list):
@@ -57,7 +55,7 @@ def process_request(search_params,filter_columns):
     result=convert_dataframe_json(result)
     return result
 
-#function to process table content retrived from html and processed using js and sent to download file python function
+#function to process table content retrived from html using js and sent to convert_text_dataframe python function in views.py
 def process_text(message):
     data=[]
     message=message.rstrip().lstrip()

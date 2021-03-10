@@ -9,7 +9,7 @@
     <script type="text/javascript" src={% static 'tour.js' %}></script>
     <link rel="stylesheet" href={% static 'tour.css' %}>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" /> -->
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
   </head>
   <body>
     <div class="header">
@@ -31,7 +31,7 @@
                         </select>
                       </div>
                       <div class="input-field fourth-wrap">
-                        <input id="radius" type="number" name="radius" min='1' max='24' placeholder="Radius-miles" required oninvalid="this.setCustomValidity('Entering radius in miles is must')" onchange="this.setCustomValidity('')" >
+                        <input id="radius" type="number" name="radius" min='1' max='24' placeholder="Radius Miles" required oninvalid="this.setCustomValidity('Entering radius within 24 miles is must')" onchange="this.setCustomValidity('')" >
                       </div>
                       <div class="input-field fifth-wrap">
                         <input id="Search" class='btn-search' type="submit" name="Search" value="Search">
