@@ -6,6 +6,6 @@
 * Once the user has confirmed their selection, the application  generates a downloadable list in the user's preferred format (PDF, CSV, or JSON).
 * User can mark certain tours as favorites and have them persist when the application is refreshed. 
 
-
+![Demo](https://github.com/vaishnavivisweswaraiah/FoodTour_Application/blob/main/InstallationManual/Food-tourdemo.gif)
 
 
